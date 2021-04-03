@@ -1,0 +1,30 @@
+This is a doctest based regression suite for dummy_pokeapi.py
+Each '>>' line is run as if in a python shell, and counts as a test.
+The next line, if not '>>' is the expected output of the previous line.
+If anything doesn't match exactly (including trailing spaces), the test fails.
+
+
+>>> from dummy_pokeapi import get_pokemons,get_pokemon
+
+
+>>> get_pokemons()
+['bulbasaur', 'ivysaur', 'venusaur', 'charmander', 'charmeleon', 'charizard', 'squirtle', 'wartortle', 'blastoise', 'caterpie']
+
+
+>>> get_pokemons(limit=3)
+['bulbasaur', 'ivysaur', 'venusaur']
+
+
+>>> get_pokemons(offset=25)
+['raichu', 'sandshrew', 'sandslash', 'nidoran-f', 'nidorina', 'nidoqueen', 'nidoran-m', 'nidorino', 'nidoking', 'clefairy']
+
+
+>>> get_pokemons(limit=4, offset=105)
+['hitmonlee', 'hitmonchan', 'lickitung', 'koffing']
+
+
+>>> get_pokemon(192)
+'sunflora'
+
+
+>>> get_pokemon(0)
