@@ -1,0 +1,15 @@
+This is a doctest based regression suite for service.py
+Each '>>' line is run as if in a python shell, and counts as a test.
+The next line, if not '>>' is the expected output of the previous line.
+If anything doesn't match exactly (including trailing spaces), the test fails.
+
+
+>>> from service import get_pokemon_header, get_pokemons
+
+
+>>> get_pokemon_header('https://pokeapi.co/api/v2/pokemon/10112/')
+{'id': 10112, 'name': 'Grimer-alola', 'types': ['Poison', 'Dark']}
+
+
+>>> get_pokemons()
+[{'id': 1, 'name': 'Bulbasaur', 'types': ['Grass', 'Poison']}, {'id': 2, 'name': 'Ivysaur', 'types': ['Grass', 'Poison']}, {'id': 3, 'name': 'Venusaur', 'types': ['Grass', 'Poison']}, {'id': 4, 'name': 'Charmander', 'types': ['Fire']}, {'id': 5, 'name': 'Charmeleon', 'types': ['Fire']}, {'id': 6, 'name': 'Charizard', 'types': ['Fire', 'Flying']}, {'id': 7, 'name': 'Squirtle', 'types': ['Water']}, {'id': 8, 'name': 'Wartortle', 'types': ['Water']}, {'id': 9, 'name': 'Blastoise', 'types': ['Water']}, {'id': 10, 'name': 'Caterpie', 'types': ['Bug']}]

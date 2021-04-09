@@ -1,19 +1,9 @@
 import requests
+from service import get_pokemon_header, get_pokemons
 
 
-URL = 'https://pokeapi.co/api/v2/pokemon'
-
-
-def get_pokemons(limit=10, offset=0):
-	parameters = {
-					'limit':limit, 
-					'offset':offset
-				 }
-	response = requests.get(URL, params=parameters)
-	if response.status_code == 200:
-		return [pokemon.get('name') for pokemon in response.json().get('results', [])]
-	else:
-		print(f'Status code: {response.status_code}')
+EXIT = 'E'
+LIST = 'L'
 
 
 def list_pokemons():		
@@ -23,9 +13,13 @@ def list_pokemons():
 	page = 1
 	pokemons = get_pokemons()
 	while True:
+		print(f'\tID\t| NAME\t\t| TYPES')
+		print('*' * 100)
 		for pokemon in pokemons:
-			print(f'\t{pokemon}')
-		print(f'\n[P]revious | p[A]ge {page} | [S]how {limit} pokemons | [N]ext | [B]ack to menu')
+			types_text = ', '.join(pokemon.get("types"))
+			print(f'\t{pokemon.get("id")}\t| {pokemon.get("name")}\t| {types_text}')
+		print('*' * 100)
+		print(f'[P]revious | p[A]ge {page} | [S]how {limit} pokemons | [N]ext | [B]ack to menu | [E]xit')
 		option = input('# Select an option: ').upper()
 		if option == 'P':
 			print('Previous')
@@ -36,7 +30,9 @@ def list_pokemons():
 		elif option == 'N':
 			print('Next')		
 		elif option == 'B':
-			break
+			return
+		elif option == EXIT:
+			return EXIT
 		else:
 			print('Invalid option!')
 
@@ -55,12 +51,13 @@ def main():
 	while True:
 		display_menu()
 		option = input('# Select an option: ').upper()
-		if option == 'L':
+		if option == LIST:
 			print('')
-			list_pokemons()
+			if list_pokemons() == EXIT:
+				break
 		elif option == 'F':
 			print('Find pokemons')
-		elif option == 'E':
+		elif option == EXIT:
 			break
 		else:
 			print('Invalid option!')
