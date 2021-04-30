@@ -19,26 +19,6 @@ If anything doesn't match exactly (including trailing spaces), the test fails.
 {'count_pokemons': 1118, 'pokemons_by_page': 5, 'count_pages': 224}
 
 
->>> get_data_paged(pokemons_by_page=10)
-{'count_pokemons': 1118, 'pokemons_by_page': 10, 'count_pages': 112}
-
-
->>> get_data_paged(pokemons_by_page=15)
-{'count_pokemons': 1118, 'pokemons_by_page': 15, 'count_pages': 75}
-
-
->>> get_data_paged(pokemons_by_page=20)
-{'count_pokemons': 1118, 'pokemons_by_page': 20, 'count_pages': 56}
-
-
->>> get_data_paged(pokemons_by_page=25)
-{'count_pokemons': 1118, 'pokemons_by_page': 25, 'count_pages': 45}
-
-
->>> get_data_paged(pokemons_by_page=30)
-{'count_pokemons': 1118, 'pokemons_by_page': 30, 'count_pages': 38}
-
-
 >>> get_page_number(pokemons_by_page=20, url='https://pokeapi.co/api/v2/pokemon?offset=140&limit=20')
 8
 
@@ -51,30 +31,17 @@ If anything doesn't match exactly (including trailing spaces), the test fails.
 {'limit': 5, 'offset': 1115}
 
 
->>> get_page_parameters({'count_pokemons': 1118, 'pokemons_by_page': 10, 'count_pages': 112}, -10)
-{'limit': 10, 'offset': 0}
-
-
->>> get_content_page(url='https://pokeapi.co/api/v2/pokemon', parameters={'limit':5, 'offset':1110})
-{'next': 'https://pokeapi.co/api/v2/pokemon?offset=1115&limit=3', 'previous': 'https://pokeapi.co/api/v2/pokemon?offset=1105&limit=5', 'pokemons': [{'id': 10213, 'name': 'Grimmsnarl-gmax', 'types': ['Dark', 'Fairy']}, {'id': 10214, 'name': 'Alcremie-gmax', 'types': ['Fairy']}, {'id': 10215, 'name': 'Copperajah-gmax', 'types': ['Steel']}, {'id': 10216, 'name': 'Duraludon-gmax', 'types': ['Steel', 'Dragon']}, {'id': 10217, 'name': 'Eternatus-eternamax', 'types': ['Poison', 'Dragon']}]}
-
-
 >>> get_content_page(url='https://pokeapi.co/api/v2/pokemon?offset=1115&limit=3')
 {'next': None, 'previous': 'https://pokeapi.co/api/v2/pokemon?offset=1112&limit=3', 'pokemons': [{'id': 10218, 'name': 'Urshifu-single-strike-gmax', 'types': ['Fighting', 'Dark']}, {'id': 10219, 'name': 'Urshifu-rapid-strike-gmax', 'types': ['Fighting', 'Water']}, {'id': 10220, 'name': 'Toxtricity-low-key-gmax', 'types': ['Electric', 'Poison']}]}
-
-
->>> get_page('https://pokeapi.co/api/v2/pokemon', {'count_pokemons': 1118, 'pokemons_by_page': 10, 'count_pages': 112}, 112)
-{'number': 112, 'offset': 1110, 'next': 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=10', 'previous': 'https://pokeapi.co/api/v2/pokemon?offset=1100&limit=10', 'content': [{'id': 10213, 'name': 'Grimmsnarl-gmax', 'types': ['Dark', 'Fairy']}, {'id': 10214, 'name': 'Alcremie-gmax', 'types': ['Fairy']}, {'id': 10215, 'name': 'Copperajah-gmax', 'types': ['Steel']}, {'id': 10216, 'name': 'Duraludon-gmax', 'types': ['Steel', 'Dragon']}, {'id': 10217, 'name': 'Eternatus-eternamax', 'types': ['Poison', 'Dragon']}, {'id': 10218, 'name': 'Urshifu-single-strike-gmax', 'types': ['Fighting', 'Dark']}, {'id': 10219, 'name': 'Urshifu-rapid-strike-gmax', 'types': ['Fighting', 'Water']}, {'id': 10220, 'name': 'Toxtricity-low-key-gmax', 'types': ['Electric', 'Poison']}]}
 
 
 >>> get_page('https://pokeapi.co/api/v2/pokemon', {'count_pokemons': 1118, 'pokemons_by_page': 10, 'count_pages': 112}, 1)
 {'number': 1, 'offset': 0, 'next': 'https://pokeapi.co/api/v2/pokemon?offset=10&limit=10', 'previous': 'https://pokeapi.co/api/v2/pokemon?offset=1110&limit=8', 'content': [{'id': 1, 'name': 'Bulbasaur', 'types': ['Grass', 'Poison']}, {'id': 2, 'name': 'Ivysaur', 'types': ['Grass', 'Poison']}, {'id': 3, 'name': 'Venusaur', 'types': ['Grass', 'Poison']}, {'id': 4, 'name': 'Charmander', 'types': ['Fire']}, {'id': 5, 'name': 'Charmeleon', 'types': ['Fire']}, {'id': 6, 'name': 'Charizard', 'types': ['Fire', 'Flying']}, {'id': 7, 'name': 'Squirtle', 'types': ['Water']}, {'id': 8, 'name': 'Wartortle', 'types': ['Water']}, {'id': 9, 'name': 'Blastoise', 'types': ['Water']}, {'id': 10, 'name': 'Caterpie', 'types': ['Bug']}]}
 
 
+>>> get_page('https://pokeapi.co/api/v2/pokemon?offset=1110&limit=8', {'count_pokemons': 1118, 'pokemons_by_page': 10, 'count_pages': 112})
+{'number': 112, 'offset': 1110, 'next': 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=10', 'previous': 'https://pokeapi.co/api/v2/pokemon?offset=1100&limit=10', 'content': [{'id': 10213, 'name': 'Grimmsnarl-gmax', 'types': ['Dark', 'Fairy']}, {'id': 10214, 'name': 'Alcremie-gmax', 'types': ['Fairy']}, {'id': 10215, 'name': 'Copperajah-gmax', 'types': ['Steel']}, {'id': 10216, 'name': 'Duraludon-gmax', 'types': ['Steel', 'Dragon']}, {'id': 10217, 'name': 'Eternatus-eternamax', 'types': ['Poison', 'Dragon']}, {'id': 10218, 'name': 'Urshifu-single-strike-gmax', 'types': ['Fighting', 'Dark']}, {'id': 10219, 'name': 'Urshifu-rapid-strike-gmax', 'types': ['Fighting', 'Water']}, {'id': 10220, 'name': 'Toxtricity-low-key-gmax', 'types': ['Electric', 'Poison']}]}
 
->>> get_page('https://pokeapi.co/api/v2/pokemon', {'count_pokemons': 1118, 'pokemons_by_page': 5, 'count_pages': 224}, 20)
-{'number': 20, 'offset': 95, 'next': 'https://pokeapi.co/api/v2/pokemon?offset=100&limit=5', 'previous': 'https://pokeapi.co/api/v2/pokemon?offset=90&limit=5', 'content': [{'id': 96, 'name': 'Drowzee', 'types': ['Psychic']}, {'id': 97, 'name': 'Hypno', 'types': ['Psychic']}, {'id': 98, 'name': 'Krabby', 'types': ['Water']}, {'id': 99, 'name': 'Kingler', 'types': ['Water']}, {'id': 100, 'name': 'Voltorb', 'types': ['Electric']}]}
 
-
->>> get_page('https://pokeapi.co/api/v2/pokemon?offset=10&limit=10', {'count_pokemons': 1118, 'pokemons_by_page': 10, 'count_pages': 112})
-{'number': 2, 'offset': 10, 'next': 'https://pokeapi.co/api/v2/pokemon?offset=20&limit=10', 'previous': 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=10', 'content': [{'id': 11, 'name': 'Metapod', 'types': ['Bug']}, {'id': 12, 'name': 'Butterfree', 'types': ['Bug', 'Flying']}, {'id': 13, 'name': 'Weedle', 'types': ['Bug', 'Poison']}, {'id': 14, 'name': 'Kakuna', 'types': ['Bug', 'Poison']}, {'id': 15, 'name': 'Beedrill', 'types': ['Bug', 'Poison']}, {'id': 16, 'name': 'Pidgey', 'types': ['Normal', 'Flying']}, {'id': 17, 'name': 'Pidgeotto', 'types': ['Normal', 'Flying']}, {'id': 18, 'name': 'Pidgeot', 'types': ['Normal', 'Flying']}, {'id': 19, 'name': 'Rattata', 'types': ['Normal']}, {'id': 20, 'name': 'Raticate', 'types': ['Normal']}]}
+>>> get_page('https://pokeapi.co/api/v2/pokemon?offset=1100&limit=10', {'count_pokemons': 1118, 'pokemons_by_page': 10, 'count_pages': 112})
+{'number': 111, 'offset': 1100, 'next': 'https://pokeapi.co/api/v2/pokemon?offset=1110&limit=8', 'previous': 'https://pokeapi.co/api/v2/pokemon?offset=1090&limit=10', 'content': [{'id': 10203, 'name': 'Corviknight-gmax', 'types': ['Flying', 'Steel']}, {'id': 10204, 'name': 'Orbeetle-gmax', 'types': ['Bug', 'Psychic']}, {'id': 10205, 'name': 'Drednaw-gmax', 'types': ['Water', 'Rock']}, {'id': 10206, 'name': 'Coalossal-gmax', 'types': ['Rock', 'Fire']}, {'id': 10207, 'name': 'Flapple-gmax', 'types': ['Grass', 'Dragon']}, {'id': 10208, 'name': 'Appletun-gmax', 'types': ['Grass', 'Dragon']}, {'id': 10209, 'name': 'Sandaconda-gmax', 'types': ['Ground']}, {'id': 10210, 'name': 'Toxtricity-amped-gmax', 'types': ['Electric', 'Poison']}, {'id': 10211, 'name': 'Centiskorch-gmax', 'types': ['Fire', 'Bug']}, {'id': 10212, 'name': 'Hatterene-gmax', 'types': ['Psychic', 'Fairy']}]}

@@ -163,16 +163,14 @@ def __format_content_page(content_page, data_paged, page_number):
 		Returns:
 			dict - Content page.
 	"""
-	if page_number == data_paged.get('count_pages'):
-			content_page['next'] = f'https://pokeapi.co/api/v2/pokemon?offset=0&limit={data_paged.get("pokemons_by_page")}'
-			content_page['previous'] = re.sub(
-				r'^.+offset=(\d+)&limit=\d+$', 
-				r'https://pokeapi.co/api/v2/pokemon?offset=\g<1>&limit=' + str(data_paged.get('pokemons_by_page')), 
-				content_page.get('previous')
-			)
+	pokemons_by_page = data_paged.get("pokemons_by_page")
+	last_page = data_paged.get('count_pages')
+	offset = pokemons_by_page * (last_page - 1)
+	if page_number == last_page:			
+			content_page['next'] = f'https://pokeapi.co/api/v2/pokemon?offset=0&limit={pokemons_by_page}'
+			content_page['previous'] = f'https://pokeapi.co/api/v2/pokemon?offset={offset - pokemons_by_page}&limit={pokemons_by_page}'
 	elif page_number == 1:
-			offset = data_paged.get('pokemons_by_page') * (data_paged.get('count_pages') - 1)	
-			content_page['previous'] = f'https://pokeapi.co/api/v2/pokemon?offset={offset}&limit={data_paged.get("count_pokemons") - offset}'	
+			content_page['previous'] = f'https://pokeapi.co/api/v2/pokemon?offset={offset}&limit={data_paged.get("count_pokemons") - offset}'
 
 
 def get_page(url, data_paged, page_number=None):
