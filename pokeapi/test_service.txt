@@ -39,7 +39,7 @@ If anything doesn't match exactly (including trailing spaces), the test fails.
 {'count_pokemons': 1118, 'pokemons_by_page': 30, 'count_pages': 38}
 
 
->>> get_page_number(count_pages=56, url='https://pokeapi.co/api/v2/pokemon?offset=140&limit=20')
+>>> get_page_number(pokemons_by_page=20, url='https://pokeapi.co/api/v2/pokemon?offset=140&limit=20')
 8
 
 

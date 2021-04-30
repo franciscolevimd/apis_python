@@ -59,20 +59,19 @@ def get_data_paged(pokemons_by_page):
 		return {'count_pokemons':count_pokemons, 'pokemons_by_page':pokemons_by_page, 'count_pages':count_pages}
 
 
-def get_page_number(count_pages, url):
+def get_page_number(pokemons_by_page, url):
 	"""Generates the page number from the URL.
 
 	Args:
-		count_pages (int) - Total of pages.
+		pokemons_by_page (int)
 		url (str) - Url to retrieves the pokemons page.
 
 	Returns: 
 		int - Page number.
 	"""
-	pattern = re.compile(r'^.+offset=(\d+)&limit=(\d+)$')
+	pattern = re.compile(r'^.+offset=(\d+)&limit=\d+$')
 	response = re.match(pattern, url)
 	if response:
-		pokemons_by_page = int(response.group(2))
 		offset = int(response.group(1))
 		return (offset // pokemons_by_page) + 1
 
@@ -82,8 +81,7 @@ def get_page_parameters(data_paged, page_number):
 	"""Retrieves the parameters to get a page by URL.
 
 	Args:
-		data_paged (dict) - Contains total of pages and the number of pokemons by page -count_pages, pokemons_by_page-.
-							See get_data_paged().
+		data_paged (dict) - See get_data_paged().
 		page_number (int)
 
 	Returns:
@@ -224,14 +222,14 @@ def get_page(url, data_paged, page_number=None):
 	"""
 	page = None
 	content_page = None
-	if page_number and data_paged:
+	if page_number:
 		content_page = get_content_page (
 				url, 
 				get_page_parameters(data_paged, page_number)
 			)
-	elif url:		
+	else:		
 		content_page = get_content_page(url)
-		page_number = get_page_number(data_paged.get('count_pages'), url)
+		page_number = get_page_number(data_paged.get('pokemons_by_page'), url)
 
 	if content_page and content_page.get('pokemons'):
 		__format_content_page(content_page, data_paged, page_number)
