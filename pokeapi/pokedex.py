@@ -1,5 +1,5 @@
 import requests
-from service import get_pokemon_header, get_data_paged, get_page
+from service import get_data_paged, get_page, get_url
 
 
 EXIT = 'E'
@@ -9,34 +9,35 @@ PAGE_DEFAULT = 1
 
 
 def list_pokemons():
-	#limit = LIMIT_DEFAULT
-	#page = PAGE_DEFAULT
-	#data_paged = get_data_paged(limit=LIMIT_DEFAULT)
-	#content_page = get_page(page=page, data_paged=data_paged)
-	#while True:		
-	#	print(f'\tID\t| NAME\t\t| TYPES')
-	#	print('*' * 100)
-	#	for pokemon in content_page.get('pokemons'):
-	#		types_text = ', '.join(pokemon.get('types'))
-	#		print(f'\t{pokemon.get("id")}\t| {pokemon.get("name")}\t| {types_text}')
-	#	print('*' * 100)
-	#	print(f'[P]revious | p[A]ge {page} | [S]how {limit} pokemons | [N]ext | [B]ack to menu | [E]xit')
-	#	option = input('# Select an option: ').upper()
-	#	if option == 'P':
-	#		print('Previous')
-	#	elif option == 'A':
-	#		print('Page')
-	#	elif option == 'S':
-	#		print('Limit')
-	#	elif option == 'N':
-	#		print('Next')		
-	#	elif option == 'B':
-	#		return
-	#	elif option == EXIT:
-	#		return EXIT
-	#	else:
-	#		print('Invalid option!')
-	pass
+	pokemons_by_page = LIMIT_DEFAULT
+	page_number = PAGE_DEFAULT
+	data_paged = get_data_paged(pokemons_by_page=LIMIT_DEFAULT)
+	page = get_page(get_url(), data_paged, page_number)
+	while True:		
+		print(f'\tID\t| NAME\t\t| TYPES')
+		print('*' * 100)
+		for pokemon in page.get('content'):
+			types_text = ', '.join(pokemon.get('types'))
+			print(f'\t{pokemon.get("id")}\t| {pokemon.get("name")}\t| {types_text}')
+		print('*' * 100)
+		print(f'[P]revious | p[A]ge {page_number} | [S]how {pokemons_by_page} pokemons | [N]ext | [B]ack to menu | [E]xit')
+		option = input('# Select an option: ').upper()
+		if option == 'P':
+			print('Previous')
+		elif option == 'A':
+			print('Page')
+		elif option == 'S':
+			print('Pokemons by page')
+		elif option == 'N':
+			page = get_page(page.get('next'), data_paged)
+			page_number = page.get('number')
+		elif option == 'B':
+			return
+		elif option == EXIT:
+			return EXIT
+		else:
+			print('Invalid option!')
+	
 
 
 def display_menu():
@@ -54,10 +55,9 @@ def main():
 		display_menu()
 		option = input('# Select an option: ').upper()
 		if option == LIST:
-			print('List pokemons')
-			#print('')
-			#if list_pokemons() == EXIT:
-			#	break
+			print('')
+			if list_pokemons() == EXIT:
+				break
 		elif option == 'F':
 			print('Find pokemons')
 		elif option == EXIT:
