@@ -26,7 +26,8 @@ def list_pokemons():
 			page = get_page(page.get('previous'), data_paged)
 			page_number = page.get('number')
 		elif option == 'A':
-			print('Page')
+			page_number = int(input('# Page: '))
+			page = get_page(get_url(), data_paged, page_number)
 		elif option == 'S':
 			print('Pokemons by page')
 		elif option == 'N':
