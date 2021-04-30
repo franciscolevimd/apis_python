@@ -144,6 +144,30 @@ def get_content_page(url, parameters=None):
 		return content_page
 
 
+def __format_content_page(content_page, data_paged, page_number):
+	"""Auxiliar function to format the contnte page.
+
+		Args:
+		content_page (dict) - See get_content_page().
+		data_paged (dict) - Contains total of pages and the number of pokemons by page -count_pages, pokemons_by_page-.
+							See get_data_paged().
+		page_number (int)
+
+		Returns:
+			dict - Content page.
+	"""
+	if page_number == data_paged.get('count_pages'):
+			content_page['next'] = f'https://pokeapi.co/api/v2/pokemon?offset=0&limit={data_paged.get("pokemons_by_page")}'
+			content_page['previous'] = re.sub(
+				r'^.+offset=(\d+)&limit=\d+$', 
+				r'https://pokeapi.co/api/v2/pokemon?offset=\g<1>&limit=' + str(data_paged.get('pokemons_by_page')), 
+				content_page.get('previous')
+			)
+	elif page_number == 1:
+			offset = data_paged.get('pokemons_by_page') * (data_paged.get('count_pages') - 1)	
+			content_page['previous'] = f'https://pokeapi.co/api/v2/pokemon?offset={offset}&limit={data_paged.get("count_pokemons") - offset}'	
+
+
 def get_page(url, data_paged, page_number=None):
 	"""Retrieves a page with its pokemons list. 
 
@@ -191,7 +215,6 @@ def get_page(url, data_paged, page_number=None):
 	"""
 	page = None
 	content_page = None
-	
 	if page_number and data_paged:
 		content_page = get_content_page (
 				url, 
@@ -202,17 +225,7 @@ def get_page(url, data_paged, page_number=None):
 		page_number = get_page_number(data_paged.get('count_pages'), url)
 
 	if content_page and content_page.get('pokemons'):
-		if page_number == data_paged.get('count_pages'):
-			content_page['next'] = f'https://pokeapi.co/api/v2/pokemon?offset=0&limit={data_paged.get("pokemons_by_page")}'
-			content_page['previous'] = re.sub(
-				r'^.+offset=(\d+)&limit=\d+$', 
-				r'https://pokeapi.co/api/v2/pokemon?offset=\g<1>&limit=' + str(data_paged.get('pokemons_by_page')), 
-				content_page.get('previous')
-			)
-		elif page_number == 1:
-			offset = data_paged.get('pokemons_by_page') * (data_paged.get('count_pages') - 1)	
-			content_page['previous'] = f'https://pokeapi.co/api/v2/pokemon?offset={offset}&limit={data_paged.get("count_pokemons") - offset}'
-			
+		__format_content_page(content_page, data_paged, page_number)
 		page = {
 			'number':page_number, 
 			'offset':data_paged.get('pokemons_by_page') * (page_number - 1),
