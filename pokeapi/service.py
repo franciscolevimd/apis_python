@@ -6,6 +6,15 @@ URL = 'https://pokeapi.co/api/v2/pokemon'
 CODE_200 = 200
 
 
+def get_url():
+	"""Retrieves the url of pokepai.
+
+Returns:
+		stirng - The url of pokeapi.	
+	"""
+	return URL
+
+
 def get_pokemon_header(url):
 	"""Retrieves the basic data of a pokemon: id, name and types.
 

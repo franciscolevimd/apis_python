@@ -4,7 +4,11 @@ The next line, if not '>>' is the expected output of the previous line.
 If anything doesn't match exactly (including trailing spaces), the test fails.
 
 
->>> from service import get_pokemon_header, get_data_paged, get_page_number, get_page_parameters, get_content_page, get_page
+>>> from service import get_url, get_pokemon_header, get_data_paged, get_page_number, get_page_parameters, get_content_page, get_page
+
+
+>>> get_url()
+'https://pokeapi.co/api/v2/pokemon'
 
 
 >>> get_pokemon_header(url='https://pokeapi.co/api/v2/pokemon/13/')
