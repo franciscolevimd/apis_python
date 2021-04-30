@@ -20,7 +20,7 @@ def list_pokemons():
 			types_text = ', '.join(pokemon.get('types'))
 			print(f'\t{pokemon.get("id")}\t| {pokemon.get("name")}\t| {types_text}')
 		print('*' * 100)
-		print(f'[P]revious | p[A]ge {page_number} | [S]how {pokemons_by_page} pokemons | [N]ext | [B]ack to menu | [E]xit')
+		print(f'Pages: {data_paged.get("count_pages")} | p[A]ge {page_number} |  [P]revious | [N]ext | [S]how {pokemons_by_page} pokemons | [B]ack to menu | [E]xit')
 		option = input('# Select an option: ').upper()
 		if option == 'P':
 			page = get_page(page.get('previous'), data_paged)
