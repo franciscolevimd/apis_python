@@ -23,7 +23,8 @@ def list_pokemons():
 		print(f'[P]revious | p[A]ge {page_number} | [S]how {pokemons_by_page} pokemons | [N]ext | [B]ack to menu | [E]xit')
 		option = input('# Select an option: ').upper()
 		if option == 'P':
-			print('Previous')
+			page = get_page(page.get('previous'), data_paged)
+			page_number = page.get('number')
 		elif option == 'A':
 			print('Page')
 		elif option == 'S':
