@@ -29,7 +29,15 @@ def list_pokemons():
 			page_number = int(input('# Page: '))
 			page = get_page(get_url(), data_paged, page_number)
 		elif option == 'S':
-			print('Pokemons by page')
+			while True:
+				limit_selected = int(input('# How many pokemon will be seen [5] [10] [15] [20] [25] [30]: '))
+				if limit_selected in [5, 10, 15, 20, 25, 30]:
+					pokemons_by_page = limit_selected
+					data_paged = get_data_paged(pokemons_by_page)
+					page = get_page(get_url(), data_paged, page_number)
+					break
+				else:
+					print('Select a valid limit!')
 		elif option == 'N':
 			page = get_page(page.get('next'), data_paged)
 			page_number = page.get('number')
