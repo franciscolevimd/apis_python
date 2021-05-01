@@ -348,19 +348,3 @@ def get_pokemon_by(id=None, name=None):
 			stats.append(stat_json) 
 		pokemon[POKEAPI_STATS] = stats
 	return pokemon
-
-
-	# Pokedex sencilla:
-	# Paginar lista de pokemones: se podrá decidir la cantidad de pokemons que se desean mostrar en cada página tenieno un límiti mínimo de 5 pokemons por página y un máximo de 20.
-	# Se deben mostrat las cantidades de páginas que de acuerdo la cantidad de pokemons por páginas elegida.
-	# Las páginas irán numeradas a partri del número 1.	
-	# Se podrá navegar hacía atrá y adelante de la página.
-	# Se podrá posicionar en una página esecífica elegida por el usuario.
-	# Como PLUS si la página actual es la primera, el navegador hacia atrás podrá posicionarse en la última página.
-	# Como PLUS si la página actual es la última, el navegador hacia adelante podrá posicionarse en la primer página.
-	# Los datos en la lista mostrarán el nombre del pokemon y sus tipos.
-	# SOLO ESTO NO COMPLIQUES EL EJEMPLO
-	# *** Tener en cuenta que count tiene el total de pokemons conocidos.
-	# *** También types contiene la lista de tipos a las que pertenece el pokemon, muestra el nombre.
-
-
