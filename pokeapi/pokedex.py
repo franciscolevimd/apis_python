@@ -1,11 +1,47 @@
 import requests
-from service import get_data_paged, get_page, get_url
+from service import get_data_paged, get_page, get_url, get_pokemon_by
 
 
 EXIT = 'E'
 LIST = 'L'
 LIMIT_DEFAULT = 10
 PAGE_DEFAULT = 1
+
+
+def find_pokemon():
+	pokemon = None
+	while True:	
+		option = input('Search by [N]ame / [I]d / or [B]ack to menu: ').upper()
+		if option == 'N':
+			pokemon_name = input('> Name: ')
+			pokemon = get_pokemon_by(name=pokemon_name)
+		elif option == 'I':
+			pokemon_id = int(input('> Id: '))
+			pokemon = get_pokemon_by(id=pokemon_id)
+		elif option == 'B':
+			break
+		else:
+			print('Invalid option!')
+		print('')
+		if pokemon:		
+			print('#' * 100)
+			print(f'#\tId: {pokemon.get("id")}')
+			print(f'#\tName: {pokemon.get("name")}')
+			print(f'#\tBase experience: {pokemon.get("base_experience")}')
+			print(f'#\tHeight: {pokemon.get("height")}')
+			print(f'#\tWeight: {pokemon.get("weight")}')
+			print(f'#\tTypes: {" | ".join(pokemon.get("types"))}')
+			print(f'#\tAbilities: {" | ".join(pokemon.get("abilities"))}')
+			print('#\tStats:')
+			for stat_json in pokemon.get('stats'):
+				print(f'#\t\t{stat_json.get("name")}')
+				print(f'#\t\tBase: {stat_json.get("base_stat")}')
+				print(f'#\t\tEeffort: {stat_json.get("effort")}')
+				print('#\t\t--------------------------------------------')
+			print('#' * 100)
+		else:
+			print('Not found pokemon.')
+		print('')
 
 
 def list_pokemons():
@@ -69,7 +105,7 @@ def main():
 			if list_pokemons() == EXIT:
 				break
 		elif option == 'F':
-			print('Find pokemons')
+			find_pokemon()
 		elif option == EXIT:
 			break
 		else:
