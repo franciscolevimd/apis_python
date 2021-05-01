@@ -4,7 +4,7 @@ The next line, if not '>>' is the expected output of the previous line.
 If anything doesn't match exactly (including trailing spaces), the test fails.
 
 
->>> from service import get_url, get_pokemon_header, get_data_paged, get_page_number, get_page_parameters, get_content_page, get_page
+>>> from service import get_url, get_pokemon_header, get_data_paged, get_page_number, get_page_parameters, get_content_page, get_page, get_pokemon_by
 
 
 >>> get_url()
@@ -39,9 +39,9 @@ If anything doesn't match exactly (including trailing spaces), the test fails.
 {'number': 1, 'offset': 0, 'next': 'https://pokeapi.co/api/v2/pokemon?offset=10&limit=10', 'previous': 'https://pokeapi.co/api/v2/pokemon?offset=1110&limit=8', 'content': [{'id': 1, 'name': 'Bulbasaur', 'types': ['Grass', 'Poison']}, {'id': 2, 'name': 'Ivysaur', 'types': ['Grass', 'Poison']}, {'id': 3, 'name': 'Venusaur', 'types': ['Grass', 'Poison']}, {'id': 4, 'name': 'Charmander', 'types': ['Fire']}, {'id': 5, 'name': 'Charmeleon', 'types': ['Fire']}, {'id': 6, 'name': 'Charizard', 'types': ['Fire', 'Flying']}, {'id': 7, 'name': 'Squirtle', 'types': ['Water']}, {'id': 8, 'name': 'Wartortle', 'types': ['Water']}, {'id': 9, 'name': 'Blastoise', 'types': ['Water']}, {'id': 10, 'name': 'Caterpie', 'types': ['Bug']}]}
 
 
->>> get_page('https://pokeapi.co/api/v2/pokemon?offset=1110&limit=8', {'count_pokemons': 1118, 'pokemons_by_page': 10, 'count_pages': 112})
-{'number': 112, 'offset': 1110, 'next': 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=10', 'previous': 'https://pokeapi.co/api/v2/pokemon?offset=1100&limit=10', 'content': [{'id': 10213, 'name': 'Grimmsnarl-gmax', 'types': ['Dark', 'Fairy']}, {'id': 10214, 'name': 'Alcremie-gmax', 'types': ['Fairy']}, {'id': 10215, 'name': 'Copperajah-gmax', 'types': ['Steel']}, {'id': 10216, 'name': 'Duraludon-gmax', 'types': ['Steel', 'Dragon']}, {'id': 10217, 'name': 'Eternatus-eternamax', 'types': ['Poison', 'Dragon']}, {'id': 10218, 'name': 'Urshifu-single-strike-gmax', 'types': ['Fighting', 'Dark']}, {'id': 10219, 'name': 'Urshifu-rapid-strike-gmax', 'types': ['Fighting', 'Water']}, {'id': 10220, 'name': 'Toxtricity-low-key-gmax', 'types': ['Electric', 'Poison']}]}
+>>> get_pokemon_by(id=12)
+{'id': 12, 'name': 'Butterfree', 'height': 11, 'weight': 320, 'types': ['Bug', 'Flying'], 'abilities': ['Compound-eyes', 'Tinted-lens'], 'base_experience': 178, 'stats': [{'base_stat': 60, 'effort': 0, 'name': 'Hp'}, {'base_stat': 45, 'effort': 0, 'name': 'Attack'}, {'base_stat': 50, 'effort': 0, 'name': 'Defense'}, {'base_stat': 90, 'effort': 2, 'name': 'Special-attack'}, {'base_stat': 80, 'effort': 1, 'name': 'Special-defense'}, {'base_stat': 70, 'effort': 0, 'name': 'Speed'}]}
 
 
->>> get_page('https://pokeapi.co/api/v2/pokemon?offset=1100&limit=10', {'count_pokemons': 1118, 'pokemons_by_page': 10, 'count_pages': 112})
-{'number': 111, 'offset': 1100, 'next': 'https://pokeapi.co/api/v2/pokemon?offset=1110&limit=8', 'previous': 'https://pokeapi.co/api/v2/pokemon?offset=1090&limit=10', 'content': [{'id': 10203, 'name': 'Corviknight-gmax', 'types': ['Flying', 'Steel']}, {'id': 10204, 'name': 'Orbeetle-gmax', 'types': ['Bug', 'Psychic']}, {'id': 10205, 'name': 'Drednaw-gmax', 'types': ['Water', 'Rock']}, {'id': 10206, 'name': 'Coalossal-gmax', 'types': ['Rock', 'Fire']}, {'id': 10207, 'name': 'Flapple-gmax', 'types': ['Grass', 'Dragon']}, {'id': 10208, 'name': 'Appletun-gmax', 'types': ['Grass', 'Dragon']}, {'id': 10209, 'name': 'Sandaconda-gmax', 'types': ['Ground']}, {'id': 10210, 'name': 'Toxtricity-amped-gmax', 'types': ['Electric', 'Poison']}, {'id': 10211, 'name': 'Centiskorch-gmax', 'types': ['Fire', 'Bug']}, {'id': 10212, 'name': 'Hatterene-gmax', 'types': ['Psychic', 'Fairy']}]}
+>>> get_pokemon_by(name='ButterFreE')
+{'id': 12, 'name': 'Butterfree', 'height': 11, 'weight': 320, 'types': ['Bug', 'Flying'], 'abilities': ['Compound-eyes', 'Tinted-lens'], 'base_experience': 178, 'stats': [{'base_stat': 60, 'effort': 0, 'name': 'Hp'}, {'base_stat': 45, 'effort': 0, 'name': 'Attack'}, {'base_stat': 50, 'effort': 0, 'name': 'Defense'}, {'base_stat': 90, 'effort': 2, 'name': 'Special-attack'}, {'base_stat': 80, 'effort': 1, 'name': 'Special-defense'}, {'base_stat': 70, 'effort': 0, 'name': 'Speed'}]}

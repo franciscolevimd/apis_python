@@ -167,10 +167,10 @@ def __format_content_page(content_page, data_paged, page_number):
 	last_page = data_paged.get('count_pages')
 	offset = pokemons_by_page * (last_page - 1)
 	if page_number == last_page:			
-			content_page['next'] = f'https://pokeapi.co/api/v2/pokemon?offset=0&limit={pokemons_by_page}'
-			content_page['previous'] = f'https://pokeapi.co/api/v2/pokemon?offset={offset - pokemons_by_page}&limit={pokemons_by_page}'
+			content_page['next'] = f'{URL}?offset=0&limit={pokemons_by_page}'
+			content_page['previous'] = f'{URL}?offset={offset - pokemons_by_page}&limit={pokemons_by_page}'
 	elif page_number == 1:
-			content_page['previous'] = f'https://pokeapi.co/api/v2/pokemon?offset={offset}&limit={data_paged.get("count_pokemons") - offset}'
+			content_page['previous'] = f'{URL}?offset={offset}&limit={data_paged.get("count_pokemons") - offset}'
 
 
 def get_page(url, data_paged, page_number=None):
@@ -239,6 +239,79 @@ def get_page(url, data_paged, page_number=None):
 			'content':content_page.pop('pokemons')
 		}
 	return page
+
+
+def get_pokemon_by(id=None, name=None):
+	"""Retrieves the pokemon data by its id or name.
+
+	Args:
+		id (int) - Pokemon id.
+		name (str) - Pokemon name.
+
+	Returns:
+		dict: Pokemon data: 
+		{
+			'id': 12, 
+			'name': 'butterfree', 
+			'height': 11, 
+			'weight': 320, 
+			'types': ['bug', 'flying'], 
+			'abilities': ['compound-eyes', 'tinted-lens'], 
+			'base_experience': 178, 
+			'stats': [
+				{
+					'base_stat': 60, 
+					'effort': 0, 
+					'name': 'hp'
+				}, 
+				{
+					'base_stat': 45, 
+					'effort': 0, 
+					'name': 'attack'
+				}, 
+				{
+					'base_stat': 50, 
+					'effort': 0, 
+					'name': 'defense'
+				}, 
+				{
+					'base_stat': 90, 
+					'effort': 2, 
+					'name': 'special-attack'
+				}, 
+				{
+					'base_stat': 80, 
+					'effort': 1, 
+					'name': 'special-defense'
+				}, 
+				{
+					'base_stat': 70, 
+					'effort': 0, 
+					'name': 'speed'
+				}
+			]
+		}
+	"""	
+	if id:
+		response = requests.get(f'{URL}/{id}')
+	elif name:
+		response = requests.get(f'{URL}/{name.lower()}')
+	pokemon = {}
+	if response.status_code == CODE_200:
+		pokemon_json = response.json()
+		pokemon['id'] = pokemon_json.get('id')
+		pokemon['name'] = pokemon_json.get('name').capitalize()
+		pokemon['height'] = pokemon_json.get('height')
+		pokemon['weight'] = pokemon_json.get('weight')
+		pokemon['types'] = [type_json.get('type').get('name').capitalize() for type_json in pokemon_json.get('types')]
+		pokemon['abilities'] = [ability_json.get('ability').get('name').capitalize() for ability_json in pokemon_json.get('abilities')]
+		pokemon['base_experience'] = pokemon_json.get('base_experience')
+		stats = []
+		for stat_json in pokemon_json.get('stats'):
+			stat_json['name'] = stat_json.pop('stat').get('name').capitalize()
+			stats.append(stat_json) 
+		pokemon['stats'] = stats
+	return pokemon
 
 
 	# Pokedex sencilla:
