@@ -5,6 +5,42 @@ import re
 URL = 'https://pokeapi.co/api/v2/pokemon'
 CODE_200 = 200
 
+POKEAPI_COUNT = 'count'
+POKEAPI_NAME = 'name' 
+POKEAPI_ID = 'id' 
+POKEAPI_TYPE = 'type'
+POKEAPI_TYPES = 'types'
+POKEAPI_OFFSET = 'offset'
+POKEAPI_LIMIT = 'limit'
+POKEAPI_RESULTS = 'results'
+POKEAPI_POKEMONS = 'pokemons'
+POKEAPI_URL = 'url'
+POKEAPI_HEIGHT = 'height'
+POKEAPI_WEIGHT = 'weight'
+POKEAPI_ABILITY = 'ability'
+POKEAPI_ABILITIES = 'abilities'
+POKEAPI_BASE_EXPERIENCE = 'base_experience'
+POKEAPI_STATS = 'stats'
+POKEAPI_STAT = 'stat'
+
+POKEDEX_ID = 'id'
+POKEDEX_NAME = 'name'
+POKEDEX_TYPES = 'types'
+POKEDEX_COUNT_PAGES = 'count_pages'
+POKEDEX_COUNT_POKEMONS = 'count_pokemons'
+POKEDEX_POKEMONS_BY_PAGE = 'pokemons_by_page'
+POKEDEX_PREVIOUS = 'previous'
+POKEDEX_NEXT = 'next'
+POKEDEX_POKEMONS = 'pokemons'
+POKEDEX_NUMBER = 'number'
+POKEDEX_OFFSET = 'offset'
+POKEDEX_CONTENT = 'content'
+POKEDEX_HEIGHT = 'height'
+POKEDEX_WEIGHT = 'weight'			
+POKEDEX_ABILITIES = 'abilities'
+POKEDEX_BASE_EXPERIENCE = 'base_experience'
+POKEDEX_STATS = 'stats'
+
 
 def get_url():
 	"""Retrieves the url of pokepai.
@@ -32,8 +68,8 @@ def get_pokemon_header(url):
 	response = requests.get(url)
 	if response.status_code == CODE_200:
 		pokemon_json = response.json()
-		pokemon = {'id':pokemon_json.get('id'), 'name':pokemon_json.get('name').capitalize()}
-		pokemon['types'] = [type_json.get('type').get('name').capitalize() for type_json in pokemon_json.get('types', [])]
+		pokemon = {POKEDEX_ID:pokemon_json.get(POKEAPI_ID), POKEDEX_NAME:pokemon_json.get(POKEAPI_NAME).capitalize()}
+		pokemon[POKEDEX_TYPES] = [type_json.get(POKEAPI_TYPE).get(POKEAPI_NAME).capitalize() for type_json in pokemon_json.get(POKEAPI_TYPES, [])]
 		return pokemon
 
 
@@ -54,9 +90,9 @@ def get_data_paged(pokemons_by_page):
 	response = requests.get(URL)
 	if response.status_code == CODE_200:		
 		pokemons_json = response.json()		
-		count_pokemons = int(pokemons_json.get('count'))
-		count_pages = (count_pokemons // pokemons_by_page) + 1 if count_pokemons % pokemons_by_page > 0 else count_pokemons // pokemons_by_page		
-		return {'count_pokemons':count_pokemons, 'pokemons_by_page':pokemons_by_page, 'count_pages':count_pages}
+		count_pokemons = int(pokemons_json.get(POKEAPI_COUNT))
+		count_pages = (count_pokemons // pokemons_by_page) + 1 if count_pokemons % pokemons_by_page > 0 else count_pokemons // pokemons_by_page
+		return {POKEDEX_COUNT_POKEMONS:count_pokemons, POKEDEX_POKEMONS_BY_PAGE:pokemons_by_page, POKEDEX_COUNT_PAGES:count_pages}
 
 
 def get_page_number(pokemons_by_page, url):
@@ -92,13 +128,13 @@ def get_page_parameters(data_paged, page_number):
 		}
 	"""
 	offset = 0
-	count_pages = data_paged.get('count_pages')		
-	pokemons_by_page = data_paged.get('pokemons_by_page')
+	count_pages = data_paged.get(POKEDEX_COUNT_PAGES)		
+	pokemons_by_page = data_paged.get(POKEDEX_POKEMONS_BY_PAGE)
 	if page_number > count_pages:
 		offset = (count_pages * pokemons_by_page) - pokemons_by_page
 	elif 0 < page_number <= count_pages:		
 		offset = pokemons_by_page * (page_number - 1)
-	return {'limit':pokemons_by_page, 'offset':offset}
+	return {POKEAPI_LIMIT:pokemons_by_page, POKEAPI_OFFSET:offset}
 
 
 def get_content_page(url, parameters=None):
@@ -145,9 +181,9 @@ def get_content_page(url, parameters=None):
 	response = requests.get(url, parameters)
 	if response.status_code == CODE_200:
 		content_page = response.json()	
-		content_page.pop('count')
-		pokemons = content_page.pop('results')
-		content_page['pokemons'] = [get_pokemon_header(pokemon.get('url')) for pokemon in pokemons]			
+		content_page.pop(POKEAPI_COUNT)
+		pokemons = content_page.pop(POKEAPI_RESULTS)
+		content_page[POKEAPI_POKEMONS] = [get_pokemon_header(pokemon.get(POKEAPI_URL)) for pokemon in pokemons]			
 		return content_page
 
 
@@ -163,14 +199,14 @@ def __format_content_page(content_page, data_paged, page_number):
 		Returns:
 			dict - Content page.
 	"""
-	pokemons_by_page = data_paged.get("pokemons_by_page")
-	last_page = data_paged.get('count_pages')
+	pokemons_by_page = data_paged.get(POKEDEX_POKEMONS_BY_PAGE)
+	last_page = data_paged.get(POKEDEX_COUNT_PAGES)
 	offset = pokemons_by_page * (last_page - 1)
 	if page_number == last_page:			
-			content_page['next'] = f'{URL}?offset=0&limit={pokemons_by_page}'
-			content_page['previous'] = f'{URL}?offset={offset - pokemons_by_page}&limit={pokemons_by_page}'
+			content_page[POKEDEX_NEXT] = f'{URL}?offset=0&limit={pokemons_by_page}'
+			content_page[POKEDEX_PREVIOUS] = f'{URL}?offset={offset - pokemons_by_page}&limit={pokemons_by_page}'
 	elif page_number == 1:
-			content_page['previous'] = f'{URL}?offset={offset}&limit={data_paged.get("count_pokemons") - offset}'
+			content_page[POKEDEX_PREVIOUS] = f'{URL}?offset={offset}&limit={data_paged.get(POKEDEX_COUNT_POKEMONS) - offset}'
 
 
 def get_page(url, data_paged, page_number=None):
@@ -227,16 +263,16 @@ def get_page(url, data_paged, page_number=None):
 			)
 	else:		
 		content_page = get_content_page(url)
-		page_number = get_page_number(data_paged.get('pokemons_by_page'), url)
+		page_number = get_page_number(data_paged.get(POKEDEX_POKEMONS_BY_PAGE), url)
 
-	if content_page and content_page.get('pokemons'):
+	if content_page and content_page.get(POKEDEX_POKEMONS):
 		__format_content_page(content_page, data_paged, page_number)
 		page = {
-			'number':page_number, 
-			'offset':data_paged.get('pokemons_by_page') * (page_number - 1),
-			'next':content_page.pop('next'), 
-			'previous':content_page.pop('previous'), 
-			'content':content_page.pop('pokemons')
+			POKEDEX_NUMBER:page_number, 
+			POKEDEX_OFFSET:data_paged.get(POKEDEX_POKEMONS_BY_PAGE) * (page_number - 1),
+			POKEDEX_NEXT:content_page.pop(POKEDEX_NEXT), 
+			POKEDEX_PREVIOUS:content_page.pop(POKEDEX_PREVIOUS), 
+			POKEDEX_CONTENT:content_page.pop(POKEDEX_POKEMONS)
 		}
 	return page
 
@@ -299,18 +335,18 @@ def get_pokemon_by(id=None, name=None):
 	pokemon = {}
 	if response.status_code == CODE_200:
 		pokemon_json = response.json()
-		pokemon['id'] = pokemon_json.get('id')
-		pokemon['name'] = pokemon_json.get('name').capitalize()
-		pokemon['height'] = pokemon_json.get('height')
-		pokemon['weight'] = pokemon_json.get('weight')
-		pokemon['types'] = [type_json.get('type').get('name').capitalize() for type_json in pokemon_json.get('types')]
-		pokemon['abilities'] = [ability_json.get('ability').get('name').capitalize() for ability_json in pokemon_json.get('abilities')]
-		pokemon['base_experience'] = pokemon_json.get('base_experience')
+		pokemon[POKEDEX_ID] = pokemon_json.get(POKEAPI_ID)
+		pokemon[POKEDEX_NAME] = pokemon_json.get(POKEAPI_NAME).capitalize()
+		pokemon[POKEDEX_HEIGHT] = pokemon_json.get(POKEAPI_HEIGHT)
+		pokemon[POKEDEX_WEIGHT] = pokemon_json.get(POKEAPI_WEIGHT)
+		pokemon[POKEDEX_TYPES] = [type_json.get(POKEAPI_TYPE).get(POKEAPI_NAME).capitalize() for type_json in pokemon_json.get(POKEAPI_TYPES)]
+		pokemon[POKEDEX_ABILITIES] = [ability_json.get(POKEAPI_ABILITY).get(POKEAPI_NAME).capitalize() for ability_json in pokemon_json.get(POKEAPI_ABILITIES)]
+		pokemon[POKEDEX_BASE_EXPERIENCE] = pokemon_json.get(POKEAPI_BASE_EXPERIENCE)
 		stats = []
-		for stat_json in pokemon_json.get('stats'):
-			stat_json['name'] = stat_json.pop('stat').get('name').capitalize()
+		for stat_json in pokemon_json.get(POKEAPI_STATS):
+			stat_json[POKEDEX_NAME] = stat_json.pop(POKEAPI_STAT).get(POKEAPI_NAME).capitalize()
 			stats.append(stat_json) 
-		pokemon['stats'] = stats
+		pokemon[POKEAPI_STATS] = stats
 	return pokemon
 
 
